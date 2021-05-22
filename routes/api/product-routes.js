@@ -1,18 +1,17 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// The `/api/products` endpoint
 
-// GET - all products
+
 router.get('/', async (req, res) => {
   try {
     const productData = await Product.findAll({
-      //JOIN with Category, Tag through ProductTag
+      //JOIN with the Category, Tag through ProductTag
       include: [ { model: Category },
                  { model: Tag, through: ProductTag, as: 'related_tags' }]
     })
     .then((result) => {
-      //return JSON response of result
+    
       res.status(200).json(result);
     })
   } catch (err) {
@@ -20,7 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET - one product by its 'id' value
+
 router.get('/:id', async (req, res) => {
   try {
     const productData = await Product.findByPk(req.params.id, {
